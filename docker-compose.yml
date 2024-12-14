@@ -1,0 +1,25 @@
+version: '3.8'
+
+networks:
+  my-network:
+
+services:
+  incallup:
+    image: gamingprism/love-dating-site:14_12_01
+    ports:
+      - "80:8080"
+    environment:
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect
+    networks:
+      - my-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  db_data:
