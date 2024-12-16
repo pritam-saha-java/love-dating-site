@@ -10,7 +10,9 @@ public interface UserService {
 
     UserEntity authenticateUser(String username, String password);
 
-    UserEntity updateUser(String username, UserOperationsRequest request);
+    UserEntity adminLogin(String username, String password);
+
+    UserEntity updateUser(Long userId, UserOperationsRequest request);
 
     void deleteUser(String username);
 

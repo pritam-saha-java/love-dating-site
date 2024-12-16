@@ -7,13 +7,11 @@ import com.love_dating_site.love_dating_site.service.DashBoardService;
 import com.love_dating_site.love_dating_site.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/public")
+@CrossOrigin("*")
 public class PublicController {
 
     private final UserService userService;

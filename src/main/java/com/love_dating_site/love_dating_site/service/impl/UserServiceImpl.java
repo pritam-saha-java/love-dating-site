@@ -47,9 +47,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public UserEntity updateUser(String username, UserOperationsRequest request) {
+    public UserEntity adminLogin(String username, String password) {
         UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (!user.getPassword().equals(password)) {
+            throw new RuntimeException("Password doesn't match");
+        }
+
+        if (!user.getUsername().equals("super.admin@gmail.com")) {
+            throw new RuntimeException("User doesn't have admin privileges");
+        }
+
+        return user;
+    }
+
+    @Override
+    @Transactional
+    public UserEntity updateUser(Long userId, UserOperationsRequest request) {
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (request.getFirstName() != null) {

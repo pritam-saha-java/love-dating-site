@@ -1,9 +1,7 @@
 package com.love_dating_site.love_dating_site.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
-@Data
 @Entity(name = "qr_codes")
 public class QrCodesEntity {
 
@@ -20,4 +18,36 @@ public class QrCodesEntity {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUpiId() {
+        return upiId;
+    }
+
+    public void setUpiId(String upiId) {
+        this.upiId = upiId;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public String getPayeeName() {
+        return payeeName;
+    }
+
+    public void setPayeeName(String payeeName) {
+        this.payeeName = payeeName;
+    }
 }

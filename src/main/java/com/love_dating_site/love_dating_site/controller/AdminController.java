@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin("*")
 public class AdminController {
 
     private final UserService userService;
@@ -24,16 +25,23 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public ResponseEntity<UserEntity> login(@RequestParam String username,
+                                            @RequestParam String password) {
+        UserEntity user = userService.adminLogin(username, password);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @RequestMapping(path = "/create-user", method = RequestMethod.POST)
     public ResponseEntity<UserEntity> createUser(@RequestBody UserOperationsRequest request) {
         UserEntity user = userService.createUser(request);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/update-user/{username}", method = RequestMethod.PUT)
-    public ResponseEntity<UserEntity> updateUser(@PathVariable("username") String username,
+    @RequestMapping(path = "/update-user/{userId}", method = RequestMethod.PUT)
+    public ResponseEntity<UserEntity> updateUser(@PathVariable("userId") Long userId,
                                                  @RequestBody UserOperationsRequest request) {
-        UserEntity user = userService.updateUser(username, request);
+        UserEntity user = userService.updateUser(userId, request);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
