@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -47,19 +48,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity adminLogin(String username, String password) {
-        UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public Map<String, String> adminLogin(String username, String password) {
 
-        if (!user.getPassword().equals(password)) {
+        if (username.equals("super.admin@gmail.com")) {
+            throw new RuntimeException("Admin User doesn't match");
+        }
+
+        if (password.equals("Admin@123")) {
             throw new RuntimeException("Password doesn't match");
         }
 
-        if (!user.getUsername().equals("super.admin@gmail.com")) {
-            throw new RuntimeException("User doesn't have admin privileges");
-        }
-
-        return user;
+        return Map.of("Status","Success");
     }
 
     @Override

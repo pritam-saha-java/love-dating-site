@@ -6,10 +6,12 @@ import com.love_dating_site.love_dating_site.dto.UserOperationsRequest;
 import com.love_dating_site.love_dating_site.service.AdminService;
 import com.love_dating_site.love_dating_site.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -26,14 +28,14 @@ public class AdminController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<UserEntity> login(@RequestParam String username,
-                                            @RequestParam String password) {
-        UserEntity user = userService.adminLogin(username, password);
+    public ResponseEntity<Map<String, String>> login(@RequestParam String username,
+                                                     @RequestParam String password) {
+        Map<String, String> user = userService.adminLogin(username, password);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/create-user", method = RequestMethod.POST)
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserOperationsRequest request) {
+    @RequestMapping(path = "/create-user", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserEntity> createUser(@ModelAttribute UserOperationsRequest request) {
         UserEntity user = userService.createUser(request);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
