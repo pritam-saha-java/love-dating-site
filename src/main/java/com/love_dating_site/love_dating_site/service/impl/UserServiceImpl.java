@@ -1,5 +1,6 @@
 package com.love_dating_site.love_dating_site.service.impl;
 
+import com.love_dating_site.love_dating_site.configuration.RemoteStorage;
 import com.love_dating_site.love_dating_site.entity.UserEntity;
 import com.love_dating_site.love_dating_site.repository.UserRepository;
 import com.love_dating_site.love_dating_site.dto.UserOperationsRequest;
@@ -10,14 +11,19 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RemoteStorage remoteStorage;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           RemoteStorage remoteStorage) {
         this.userRepository = userRepository;
+        this.remoteStorage = remoteStorage;
     }
 
     @Override
@@ -32,6 +38,11 @@ public class UserServiceImpl implements UserService {
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
         user.setBalance(request.getBalance());
+
+        //Handle Image
+        String url = UUID.randomUUID() + ".jpg";
+        remoteStorage.uploadFile(request.getImage(), url);
+        user.setImage(url);
         return userRepository.save(user);
     }
 
@@ -43,18 +54,18 @@ public class UserServiceImpl implements UserService {
         if (!user.getPassword().equals(password)) {
             throw new RuntimeException("Password doesn't match");
         }
-
+        user.setImage(remoteStorage.getCdnUrl(user.getImage()));
         return user;
     }
 
     @Override
     public Map<String, String> adminLogin(String username, String password) {
 
-        if (username.equals("super.admin@gmail.com")) {
+        if (!username.equals("super.admin@gmail.com")) {
             throw new RuntimeException("Admin User doesn't match");
         }
 
-        if (password.equals("Admin@123")) {
+        if (!password.equals("Admin@123")) {
             throw new RuntimeException("Password doesn't match");
         }
 
@@ -104,7 +115,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserEntity> getAllUsers() {
         List<UserEntity> result = new ArrayList<>();
-        userRepository.findAll().forEach(result::add);
+        userRepository.findAll().forEach(user -> {
+            String cdnUrl = remoteStorage.getCdnUrl(user.getImage());
+            user.setImage(cdnUrl);
+            result.add(user);
+        });
         return result;
     }
+
 }

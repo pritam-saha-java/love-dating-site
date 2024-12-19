@@ -26,8 +26,8 @@ public class RemoteStorage {
     @Value("${aws.application.bucket.name}")
     private String bucketName;
 
-    @Value("${cloudflare.application.bucket.url}")
-    private String cfUrl;
+    @Value("${aws.cloudfront.url}")
+    private String cdnUrl;
 
     @Autowired
     private AmazonS3 s3Client;
@@ -60,7 +60,7 @@ public class RemoteStorage {
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
             fos.write(file.getBytes());
         } catch (IOException e) {
-            log.error("Error converting multipartFile to file", e);
+            e.printStackTrace();
         }
         return convertedFile;
     }
@@ -73,10 +73,11 @@ public class RemoteStorage {
                         .withMethod(HttpMethod.GET)
                         .withExpiration(expiration);
 
+
         return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
     }
 
     public String getCdnUrl(String key) {
-        return cfUrl + key;
+        return cdnUrl + key;
     }
 }

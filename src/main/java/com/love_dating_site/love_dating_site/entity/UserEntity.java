@@ -26,6 +26,9 @@ public class UserEntity {
     @Column(name = "balance")
     private Double balance;
 
+    @Column(name = "image")
+    private String image;
+
     public Long getId() {
         return id;
     }
@@ -72,5 +75,13 @@ public class UserEntity {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

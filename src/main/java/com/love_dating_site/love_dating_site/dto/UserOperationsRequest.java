@@ -1,12 +1,15 @@
 package com.love_dating_site.love_dating_site.dto;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserOperationsRequest {
     private String username;
     private String password;
     private String firstName;
     private String lastName;
     private Double balance;
+    private MultipartFile image;
 
     public String getUsername() {
         return username;
@@ -46,5 +49,13 @@ public class UserOperationsRequest {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 }
